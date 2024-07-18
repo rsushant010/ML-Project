@@ -1,0 +1,12 @@
+pandas
+numpy
+seaborn
+matplotlib
+
+
+-e .
+
+# this -e . will automatically triggers the setup.py to install all the changes done in requirements.txt
+
+
+# now the issue arises that -e . will also be sent in the requirements list in setup.py and we have to fix it

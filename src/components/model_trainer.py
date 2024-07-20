@@ -12,12 +12,12 @@ from sklearn.ensemble import (
 )
 from sklearn.linear_model import LinearRegression
 from xgboost import XGBRegressor
-from catboost import CatBoostRegressor
+
 
 from src.exception import CustomException
 from src.logger import logging
 
-from src.utils import save_object, evaluate_models
+from src.utils import save_object, evaluate_model
 
 
 @dataclass
@@ -30,8 +30,9 @@ class ModelTrainer:
         # thus we will be able to get above particular path
         self.model_trainer_config = ModelTrainerConfig()
 
-    def initiate_model_training(self , train_arr,test_arr,preprocessor_path):
-        # this train_arr and other parameters are outcome of data_transformation.py
+    def initiate_model_training(self , train_arr,test_arr):
+        # this train_arr and other parameters are outcome of data_transformation.py and removed preprocessor path as it is not required anywhere
+
         try:
             logging.info("Split training and test input data")
 
@@ -44,13 +45,12 @@ class ModelTrainer:
             )
 
             models = {
-                "linear regression" : LinearRegression(),
-                "random forest" : RandomForestRegressor(),
-                "decision tree" : DecisionTreeRegressor(),
-                # "knn" : KNeighborsRegressor(),
-                "gradient boosting" : GradientBoostingRegressor(),
-                "XGB Regressor": XGBRegressor(),
-                "CatBoosting Regressor": CatBoostRegressor(verbose=False),
+                "Random Forest": RandomForestRegressor(),
+                "Decision Tree": DecisionTreeRegressor(),
+                "Gradient Boosting": GradientBoostingRegressor(),
+                "Linear Regression": LinearRegression(),
+                "XGBRegressor": XGBRegressor(),
+                # "CatBoosting Regressor": CatBoostRegressor(verbose=False),
                 "AdaBoost Regressor": AdaBoostRegressor(),
             }
 
@@ -93,7 +93,7 @@ class ModelTrainer:
             }
 
 
-            model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models,param=params)
+            model_report:dict=evaluate_model(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models,param=params)
             # evaluate_models will be a function created inside utils
 
              ## To get best model score from dict
@@ -111,7 +111,7 @@ class ModelTrainer:
             logging.info(f"Best found model on both training and testing dataset")
 
             save_object(
-                file_path=self.model_trainer_config.trained_model_file_path,
+                file_path=self.model_trainer_config.trainer_model_file_path,
                 obj=best_model
             )
 

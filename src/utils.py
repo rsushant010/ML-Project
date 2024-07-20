@@ -29,7 +29,7 @@ def evaluate_model(X_train , y_train , X_test, y_test , models , param):
         report = {}
 
         for i in range(len(list(models))):
-            model = list(models.value())[i]
+            model = list(models.values())[i]
             para=param[list(models.keys())[i]]
 
             # to find the best values for hypertuning we are using gridsearchCV
